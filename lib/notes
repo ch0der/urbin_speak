@@ -1,0 +1,7 @@
+take word
+run function api request w that word
+return results for all definitions
+ontap -> call function that will do something?? and then show the new definitions
+
+
+for now just expand and show 3 additional definitions
