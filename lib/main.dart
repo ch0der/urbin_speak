@@ -17,6 +17,7 @@ Future main() async{
         '/': (context) => const MyApp(),
         'tutorial_page':(context) => const TutorialPage(),
         'login_page':(context)=>  const LoginPage(),
+        'front_page':(context)=> const FrontPageP(),
       },
     ),
 
@@ -35,6 +36,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return const LoginPage();
+    return const FrontPageP();
   }
 }
