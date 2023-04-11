@@ -21,20 +21,29 @@ class _FrontPagePState extends State<FrontPageP> {
   Future getWebInfo() async {
     final url = Uri.parse('https://www.amazon.com/gp/bestsellers');
     final res = await http.get(url);
+    final String x = 'B0';
     dom.Document html = dom.Document.html(res.body);
 
     final titles = html
         .querySelectorAll(' a:nth-child(1) > span > div')
         .map((e) => e.innerHtml.trim())
         .toList();
-    print('Count: ${titles.length}');
-    for (final title in titles) {
-      debugPrint(title);
-    }
+
     final urls = html
-        .querySelectorAll(' a:nth-child(1)>span>div')
-        .map((e) => 'https://www.amazon.com/${e.attributes['href']}')
+        .querySelectorAll('a:nth-child(1)')
+        .map((e) => '${e.attributes['href']}')
+        .where((item) => item.contains('&psc=1'))
         .toList();
+
+    final images = html
+        .querySelectorAll('a:nth-child(1)')
+        .map((e) => '${e.attributes['src']}')
+        .toList();
+    print(images);
+    print('Count: ${images.length}');
+    for (final image in images) {
+      debugPrint(image);
+    }
 
     setState(() {
       articles = List.generate(
@@ -78,20 +87,30 @@ class _FrontPagePState extends State<FrontPageP> {
         itemBuilder: (context, index) {
           final article = articles[index];
           return Center(
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width * .75,
-              child: ListTile(
-                title: Text(
-                  article.title,
-                  textAlign: TextAlign.center,
+            child: Column(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  child: Image.asset('name'),
                 ),
-                subtitle: Text(article.url)
-              ),
+                Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * .75,
+                  child: ListTile(
+                    //leading: Image.network(article.image,width: 100,fit: BoxFit.fitWidth,),
+                    title: Text(
+                      article.title,
+                      textAlign: TextAlign.center,
+                    ),
+                    //subtitle: Text('www.amazon.com${article.url}')
+                  ),
+                ),
+              ],
             ),
           );
         },
-        separatorBuilder: (context, intex) {
+        separatorBuilder: (context, index) {
           return Container();
         },
         itemCount: articles.length);
